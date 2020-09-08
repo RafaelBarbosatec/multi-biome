@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:bonfire/bonfire.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flutter/material.dart';
@@ -7,11 +5,9 @@ import 'package:multibiomegame/main.dart';
 
 class GamePlayer extends SimplePlayer {
   final Position initPosition;
-  double stamina = 100;
-  Timer _timerStamina;
   static final sizePlayer = tileSize * 1.5;
   Paint _paintFocus = Paint()..blendMode = BlendMode.clear;
-  bool isGroundWater = false;
+  bool isWater = false;
   double baseSpeed = sizePlayer * 2;
 
   GamePlayer(this.initPosition, SpriteSheet spriteSheet,
@@ -41,50 +37,21 @@ class GamePlayer extends SimplePlayer {
   @override
   void joystickChangeDirectional(JoystickDirectionalEvent event) {
     if (event.directional != JoystickMoveDirectional.IDLE) {
-      speed = (baseSpeed * (isGroundWater ? 0.5 : 1)) * event.intensity;
+      speed = (baseSpeed * (isWater ? 0.5 : 1)) * event.intensity;
     }
     super.joystickChangeDirectional(event);
-  }
-
-  void _verifyStamina() {
-    if (_timerStamina == null) {
-      _timerStamina = Timer(Duration(milliseconds: 150), () {
-        _timerStamina = null;
-      });
-    } else {
-      return;
-    }
-
-    stamina += 2;
-    if (stamina > 100) {
-      stamina = 100;
-    }
-  }
-
-  void decrementStamina(int i) {
-    stamina -= i;
-    if (stamina < 0) {
-      stamina = 0;
-    }
-  }
-
-  @override
-  void update(double dt) {
-    if (isDead) return;
-    _verifyStamina();
-    super.update(dt);
+    isWater = tileIsWater();
   }
 
   @override
   void render(Canvas canvas) {
-    isGroundWater = tileIsWater();
-    if (isGroundWater) {
+    if (isWater) {
       canvas.saveLayer(Offset.zero & gameRef?.size, Paint());
     }
 
     super.render(canvas);
 
-    if (isGroundWater) {
+    if (isWater) {
       canvas.drawRect(
         Rect.fromLTWH(
           position.left,
@@ -110,14 +77,5 @@ class GamePlayer extends SimplePlayer {
         positionFromTarget: Position(25, -10),
       ),
     );
-  }
-
-  @override
-  void receiveDamage(double damage, int from) {
-    this.showDamage(
-      damage,
-      config: TextConfig(color: Colors.red, fontSize: 14),
-    );
-    super.receiveDamage(damage, from);
   }
 }
