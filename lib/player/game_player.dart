@@ -10,6 +10,9 @@ class GamePlayer extends SimplePlayer {
   double stamina = 100;
   Timer _timerStamina;
   static final sizePlayer = tileSize * 1.5;
+  Paint _paintFocus = Paint()..blendMode = BlendMode.clear;
+  bool isGroundWater = false;
+  double baseSpeed = sizePlayer * 2;
 
   GamePlayer(this.initPosition, SpriteSheet spriteSheet,
       {Direction initDirection = Direction.right})
@@ -34,6 +37,14 @@ class GamePlayer extends SimplePlayer {
             align: Offset(sizePlayer * 0.25, sizePlayer * 0.7),
           ),
         );
+
+  @override
+  void joystickChangeDirectional(JoystickDirectionalEvent event) {
+    if (event.directional != JoystickMoveDirectional.IDLE) {
+      speed = (baseSpeed * (isGroundWater ? 0.5 : 1)) * event.intensity;
+    }
+    super.joystickChangeDirectional(event);
+  }
 
   void _verifyStamina() {
     if (_timerStamina == null) {
@@ -63,6 +74,31 @@ class GamePlayer extends SimplePlayer {
     _verifyStamina();
     super.update(dt);
   }
+
+  @override
+  void render(Canvas canvas) {
+    isGroundWater = tileIsWater();
+    if (isGroundWater) {
+      canvas.saveLayer(Offset.zero & gameRef?.size, Paint());
+    }
+
+    super.render(canvas);
+
+    if (isGroundWater) {
+      canvas.drawRect(
+        Rect.fromLTWH(
+          position.left,
+          position.top + height * 0.62,
+          width,
+          height,
+        ),
+        _paintFocus,
+      );
+      canvas.restore();
+    }
+  }
+
+  bool tileIsWater() => tileTypeBelow() == 'water';
 
   void showEmote(FlameAnimation.Animation emoteAnimation) {
     gameRef.add(
