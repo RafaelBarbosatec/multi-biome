@@ -21,7 +21,7 @@ packages:
       name: bonfire
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.6.24"
+    version: "0.6.25"
   boolean_selector:
     dependency: transitive
     description:

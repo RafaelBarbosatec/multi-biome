@@ -1,5 +1,4 @@
 import 'package:bonfire/bonfire.dart';
-import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flutter/material.dart';
 import 'package:multibiomegame/main.dart';
 
@@ -30,7 +29,7 @@ class GamePlayer extends SimplePlayer {
           collision: Collision(
             height: sizePlayer / 3,
             width: sizePlayer * 0.5,
-            align: Offset(sizePlayer * 0.25, sizePlayer * 0.7),
+            align: Offset(sizePlayer * 0.25, sizePlayer * 0.65),
           ),
         );
 
@@ -46,18 +45,16 @@ class GamePlayer extends SimplePlayer {
   @override
   void render(Canvas canvas) {
     if (isWater) {
-      canvas.saveLayer(Offset.zero & gameRef?.size, Paint());
+      canvas.saveLayer(position, Paint());
     }
-
     super.render(canvas);
-
     if (isWater) {
       canvas.drawRect(
         Rect.fromLTWH(
           position.left,
           position.top + height * 0.62,
-          width,
-          height,
+          position.width,
+          position.height * 0.38,
         ),
         _paintFocus,
       );
@@ -66,16 +63,4 @@ class GamePlayer extends SimplePlayer {
   }
 
   bool tileIsWater() => tileTypeBelow() == 'water';
-
-  void showEmote(FlameAnimation.Animation emoteAnimation) {
-    gameRef.add(
-      AnimatedFollowerObject(
-        animation: emoteAnimation,
-        target: this,
-        width: position.width / 2,
-        height: position.width / 2,
-        positionFromTarget: Position(25, -10),
-      ),
-    );
-  }
 }
