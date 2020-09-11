@@ -1,9 +1,11 @@
+import 'dart:math';
+
 import 'package:bonfire/bonfire.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:multibiomegame/maps/map1.dart';
 
-final tileSize = 32.0;
+double tileSize = 32.0;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (!kIsWeb) {
@@ -29,7 +31,11 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: Map1(),
+      home: LayoutBuilder(builder: (context, constraints) {
+        tileSize = max(constraints.maxHeight, constraints.maxWidth) / 30;
+        print(tileSize);
+        return Map1();
+      }),
     );
   }
 }

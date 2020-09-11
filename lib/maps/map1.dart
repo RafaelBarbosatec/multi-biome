@@ -5,6 +5,7 @@ import 'package:multibiomegame/maps/map2.dart';
 import 'package:multibiomegame/player/game_player.dart';
 import 'package:multibiomegame/player/sprite_sheet_hero.dart';
 import 'package:multibiomegame/util/exit_map_sensor.dart';
+import 'package:multibiomegame/util/extensions.dart';
 
 class Map1 extends StatelessWidget {
   final ShowInEnum showInEnum;
@@ -14,6 +15,7 @@ class Map1 extends StatelessWidget {
   Widget build(BuildContext context) {
     return BonfireTiledWidget(
       joystick: Joystick(
+        keyboardEnable: true,
         directional: JoystickDirectional(),
       ),
       player: GamePlayer(
@@ -60,15 +62,9 @@ class Map1 extends StatelessWidget {
 
   void _exitMap(String value, BuildContext context) {
     if (value == 'sensorRight') {
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Map2(
-            showInEnum: ShowInEnum.left,
-          ),
-        ),
-        (Route<dynamic> route) => false,
-      );
+      context.goTo(Map2(
+        showInEnum: ShowInEnum.left,
+      ));
     }
   }
 
