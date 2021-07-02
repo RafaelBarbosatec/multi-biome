@@ -28,35 +28,37 @@ class Map1 extends StatelessWidget {
         forceTileSize: Size(tileSize, tileSize),
       )..registerObject(
           'sensorRight',
-          (x, y, width, height) => ExitMapSensor(
+          (p) => ExitMapSensor(
             'sensorRight',
-            Position(x, y),
-            width,
-            height,
+            p.position,
+            p.size.width,
+            p.size.height,
             (v) => _exitMap(v, context),
           ),
         ),
-      cameraMoveOnlyMapArea: true,
+      cameraConfig: CameraConfig(
+        moveOnlyMapArea: true
+      ),
       progress: SizedBox.shrink(),
     );
   }
 
-  Position _getInitPosition() {
+  Vector2 _getInitPosition() {
     switch (showInEnum) {
       case ShowInEnum.left:
-        return Position(tileSize * 2, tileSize * 10);
+        return Vector2(tileSize * 2, tileSize * 10);
         break;
       case ShowInEnum.right:
-        return Position(tileSize * 27, tileSize * 12);
+        return Vector2(tileSize * 27, tileSize * 12);
         break;
       case ShowInEnum.top:
-        return Position.empty();
+        return Vector2.zero();
         break;
       case ShowInEnum.bottom:
-        return Position.empty();
+        return Vector2.zero();
         break;
       default:
-        return Position.empty();
+        return Vector2.zero();
     }
   }
 

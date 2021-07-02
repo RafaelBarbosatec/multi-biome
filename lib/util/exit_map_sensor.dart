@@ -2,16 +2,15 @@ import 'package:bonfire/bonfire.dart';
 import 'package:flutter/widgets.dart';
 
 class ExitMapSensor extends GameDecoration with Sensor {
-  final Position initPosition;
   final String id;
   bool hasContact = false;
   final ValueChanged<String> exitMap;
 
   ExitMapSensor(
-      this.id, this.initPosition, double width, double height, this.exitMap)
-      : super.sprite(
+      this.id, Vector2 position, double width, double height, this.exitMap)
+      : super.withSprite(
           null,
-          initPosition: initPosition,
+          position: position,
           width: width,
           height: height,
         );
