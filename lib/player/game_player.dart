@@ -29,8 +29,7 @@ class GamePlayer extends SimplePlayer with ObjectCollision {
             runRight:
                 spriteSheet.createAnimation(row: 7, stepTime: 0.1).asFuture(),
           ),
-          width: sizePlayer,
-          height: sizePlayer,
+          size: Vector2.all(sizePlayer),
           position: position,
           initDirection: initDirection,
           life: 100,
@@ -40,7 +39,7 @@ class GamePlayer extends SimplePlayer with ObjectCollision {
       CollisionConfig(
         collisions: [
           CollisionArea.rectangle(
-            size: Size(sizePlayer * 0.5, sizePlayer / 3),
+            size: Vector2(sizePlayer * 0.5, sizePlayer / 3),
             align: Vector2(sizePlayer * 0.25, sizePlayer * 0.65),
           ),
         ],
@@ -60,16 +59,16 @@ class GamePlayer extends SimplePlayer with ObjectCollision {
   @override
   void render(Canvas canvas) {
     if (isWater) {
-      canvas.saveLayer(position.rect, Paint());
+      canvas.saveLayer(toRect(), Paint());
     }
     super.render(canvas);
     if (isWater) {
       canvas.drawRect(
         Rect.fromLTWH(
-          position.left,
-          position.top + height * 0.62,
-          position.width,
-          position.height * 0.38,
+          left,
+          top + height * 0.62,
+          width,
+          height * 0.38,
         ),
         _paintFocus,
       );

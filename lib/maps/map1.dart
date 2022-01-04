@@ -15,7 +15,7 @@ class Map1 extends StatelessWidget {
   Widget build(BuildContext context) {
     return BonfireTiledWidget(
       joystick: Joystick(
-        keyboardEnable: true,
+        keyboardConfig: KeyboardConfig(),
         directional: JoystickDirectional(),
       ),
       player: GamePlayer(
@@ -31,15 +31,16 @@ class Map1 extends StatelessWidget {
           (p) => ExitMapSensor(
             'sensorRight',
             p.position,
-            p.size.width,
-            p.size.height,
+            p.size,
             (v) => _exitMap(v, context),
           ),
         ),
-      cameraConfig: CameraConfig(
-        moveOnlyMapArea: true
+      cameraConfig: CameraConfig(moveOnlyMapArea: true),
+      progress: Container(
+        width: double.maxFinite,
+        height: double.maxFinite,
+        color: Colors.black,
       ),
-      progress: SizedBox.shrink(),
     );
   }
 

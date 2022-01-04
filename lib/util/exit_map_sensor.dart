@@ -6,13 +6,10 @@ class ExitMapSensor extends GameDecoration with Sensor {
   bool hasContact = false;
   final ValueChanged<String> exitMap;
 
-  ExitMapSensor(
-      this.id, Vector2 position, double width, double height, this.exitMap)
-      : super.withSprite(
-          null,
+  ExitMapSensor(this.id, Vector2 position, Vector2 size, this.exitMap)
+      : super(
           position: position,
-          width: width,
-          height: height,
+          size: size,
         );
 
   @override
